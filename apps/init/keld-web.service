@@ -1,0 +1,13 @@
+[Unit]
+Description=Keld Web
+After=keld.service
+Requires=keld.service
+
+[Service]
+ExecStart=/usr/bin/keld-web
+Restart=always
+RestartSec=30
+Environment="GOMEMLIMIT=50MiB"
+
+[Install]
+WantedBy=multi-user.target

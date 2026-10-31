@@ -1,0 +1,12 @@
+[Unit]
+Description=Keld
+
+[Service]
+ExecStartPre=/usr/bin/modprobe keld
+ExecStart=/usr/bin/keld
+Nice=10
+Restart=on-success
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

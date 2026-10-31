@@ -1,0 +1,31 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: apps/go.mod
+          cache-dependency-path: apps/go.sum
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: webui/package-lock.json
+      - run: sudo apt-get update && sudo apt-get install -y cmake g++ nlohmann-json3-dev libnl-genl-3-dev linux-headers-$(uname -r)
+      - run: make
+      - run: npm test
+        working-directory: webui
+      - run: go test ./...
+        working-directory: apps
+      - run: go test -race ./internal/web ./internal/worker
+        working-directory: apps

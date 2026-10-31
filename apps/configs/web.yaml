@@ -1,0 +1,6 @@
+# SQLite3 database file
+db: "/var/lib/keld/web.db"
+
+# web service listening address
+# Local-only by default. Configure explicitly for remote administration.
+listen: "127.0.0.1:8080"

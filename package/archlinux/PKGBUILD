@@ -1,0 +1,24 @@
+# Keld local source packaging template (no published archive required)
+pkgname=keld
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Host Intrusion Detection and Prevention System"
+url="https://github.com/lanthora/keld"
+license=('GPL')
+arch=('x86_64' 'armv7h' 'aarch64')
+# Run makepkg from package/archlinux in the source checkout.
+source=()
+sha256sums=()
+depends=('dkms' 'libnl')
+makedepends=('cmake' 'make' 'go' 'nlohmann-json' 'nodejs' 'npm')
+backup=('etc/keld/telegram.yaml' 'etc/keld/web.yaml' 'etc/keld/notify.yaml')
+
+build() {
+  cd "$startdir/../.."
+  make arch-build
+}
+
+package() {
+  cd "$startdir/../.."
+  make DESTDIR="$pkgdir/" arch-install
+}

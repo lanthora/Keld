@@ -1,0 +1,6 @@
+# cp notify.yaml ~/.config/keld/notify.yaml
+# update your config
+# systemctl start keld-notify --user
+server: "http[s]://your-keld-web-server"
+username: "test"
+password: "123456"
