@@ -24,7 +24,7 @@ func GetDataSourceNameFromConfig(config *viper.Viper) (dataSourceName string) {
 		os.MkdirAll(filepath.Dir(dbFile), os.ModePerm)
 	}
 
-	dbOptions := "?cache=shared&mode=rwc&_journal_mode=WAL"
+	dbOptions := "?cache=shared&mode=rwc&_pragma=journal_mode(WAL)"
 	dataSourceName = "file:" + dbFile + dbOptions
 	return
 }

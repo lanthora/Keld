@@ -12,9 +12,9 @@ import (
 	"github.com/lanthora/keld/apps/internal/web"
 	"github.com/lanthora/keld/apps/internal/worker"
 	"github.com/lanthora/keld/apps/pkg/logger"
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	_ "modernc.org/sqlite"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 
 	listen := config.GetString("listen")
 	dataSourceName := common.GetDataSourceNameFromConfig(config)
-	db, err := sql.Open("sqlite3", dataSourceName)
+	db, err := sql.Open("sqlite", dataSourceName)
 	if err != nil {
 		logrus.Fatal(err)
 	}

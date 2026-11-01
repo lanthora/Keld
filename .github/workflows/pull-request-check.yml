@@ -23,9 +23,11 @@ jobs:
           cache-dependency-path: webui/package-lock.json
       - run: sudo apt-get update && sudo apt-get install -y cmake g++ nlohmann-json3-dev libnl-genl-3-dev linux-headers-$(uname -r)
       - run: make
+        env:
+          CGO_ENABLED: "0"
       - run: npm test
         working-directory: webui
-      - run: go test ./...
+      - run: CGO_ENABLED=0 go test ./...
         working-directory: apps
       - run: go test -race ./internal/web ./internal/worker
         working-directory: apps

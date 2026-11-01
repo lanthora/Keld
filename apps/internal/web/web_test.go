@@ -18,7 +18,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type testCore struct {
@@ -103,7 +103,7 @@ func (c *testClient) post(path string, body any, expected int) response {
 }
 func testServer(t *testing.T) (*sql.DB, http.Handler) {
 	t.Helper()
-	db, err := sql.Open("sqlite3", ":memory:")
+	db, err := sql.Open("sqlite", ":memory:")
 	if err != nil {
 		t.Fatal(err)
 	}

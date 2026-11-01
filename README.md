@@ -40,7 +40,7 @@ Requirements:
 | Kernel | Linux 5.10 or later; matching headers and a usable kernel build tree for the **running** kernel |
 | Architecture | x86-64, ARM, or ARM64 code paths; the deployment validation currently covers x86-64 |
 | Native build | make, CMake 3.18.4+, a C++20-capable compiler, nlohmann-json, and libnl3 development files |
-| Go | At least the version declared in `apps/go.mod`; CGO and a C compiler are required for SQLite |
+| Go | At least the version declared in `apps/go.mod`; SQLite uses the CGO-free `modernc.org/sqlite` driver |
 | Frontend build | Node.js 22.12+ and npm; see `webui/package.json` for the complete engine constraint |
 | Utilities | Git, curl, Python 3, kmod, binutils, and standard GNU shell tools |
 | Network | Access to this repository and its Go/npm dependency registries during the build |
@@ -85,7 +85,7 @@ test -f /usr/include/libnl3/netlink/netlink.h
 test -f "/lib/modules/$(uname -r)/build/Makefile"
 ```
 
-`CGO_ENABLED` must be `1`. Installing Node.js on an administrator's workstation does not satisfy the target host's build requirement.
+The Go applications can be built with `CGO_ENABLED=0`; SQLite does not require a C compiler. The native core has separate build requirements listed above. Installing Node.js on an administrator's workstation does not satisfy the target host's build requirement.
 
 ## 3. Obtain and build the source
 
@@ -352,6 +352,8 @@ ls -ld "/lib/modules/$(uname -r)/build"
 The default `make install` installs a module for the running kernel only. After changing kernels, rebuild and reinstall against the new running kernel's headers. The repository also supplies a DKMS configuration under `core/kernel-space/` for environments managing module rebuilds through DKMS.
 
 For application updates, record the deployed commit, stop `keld-web.service`, optional `keld-telegram.service`, and `keld.service`, and back up `/etc/keld/`, `/var/lib/keld/`, and current binaries before replacing them. Copy SQLite databases only with their writers stopped. Build the intended revision, install, restore the intended configuration, start services, and repeat authenticated acceptance checks. `make install` overwrites configuration templates; do not discard the existing configuration.
+
+SQLite driver upgrades do not require conversion of existing SQLite 3 databases. Keep any accompanying WAL files with the database until a clean checkpoint. The CGO-free driver uses `_pragma=journal_mode(WAL)` instead of the previous driver's `_journal_mode=WAL`; the applications set this option automatically.
 
 ### Uninstall
 
