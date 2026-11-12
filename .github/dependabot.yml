@@ -4,3 +4,7 @@ updates:
     directory: "/apps"
     schedule:
       interval: "daily"
+    groups:
+      all-dependencies:
+        patterns:
+          - "*"
